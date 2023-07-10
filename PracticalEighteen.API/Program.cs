@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using PracticalEighteen.Db.DatabaseContext;
+using PracticalEighteen.Db.Interfaces;
+using PracticalEighteen.Db.Repository;
+
 namespace PracticalEighteen.API
 {
     public class Program
@@ -12,6 +17,12 @@ namespace PracticalEighteen.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddDbContextPool<StudentDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("StudentDbEntities"));
+            });
 
             var app = builder.Build();
 
